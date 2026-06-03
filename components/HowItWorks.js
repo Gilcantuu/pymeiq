@@ -1,18 +1,18 @@
 const steps = [
   {
     n: 1,
-    title: "Conecta tus datos",
-    text: "Responde 12 preguntas clave sobre ventas, costos, equipo y mercado de tu negocio.",
+    title: "Connect your data",
+    text: "Answer 5 key questions about your business: name, industry, revenue, team, top challenge.",
   },
   {
     n: 2,
-    title: "AI analiza",
-    text: "Nuestro modelo compara tu situación con benchmarks reales de tu industria en LATAM.",
+    title: "AI analyzes",
+    text: "Our model compares your situation with templates inspired by SMB benchmarks across LATAM.",
   },
   {
     n: 3,
-    title: "Recibe plan accionable",
-    text: "5 acciones priorizadas con impacto esperado, plazo sugerido y métricas para medir.",
+    title: "Get an actionable plan",
+    text: "3 prioritized actions with expected impact, suggested timeframe, and clear next steps.",
   },
 ];
 
@@ -21,10 +21,10 @@ export default function HowItWorks() {
     <section id="how" className="bg-white py-24">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900 text-center">
-          ¿Cómo funciona?
+          How it works
         </h2>
         <p className="mt-4 text-center text-slate-600 max-w-2xl mx-auto">
-          Tres pasos. Diez minutos. Resultado accionable.
+          Three steps. Ten minutes. An actionable result.
         </p>
 
         <div className="mt-16 grid gap-10 md:grid-cols-3">

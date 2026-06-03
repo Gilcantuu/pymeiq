@@ -5,7 +5,7 @@ export default function TechStack() {
     <section className="bg-white py-16 border-t border-slate-200">
       <div className="mx-auto max-w-6xl px-6">
         <p className="text-center text-sm font-semibold uppercase tracking-wider text-slate-500">
-          Construido con
+          Built with
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           {tech.map((t) => (

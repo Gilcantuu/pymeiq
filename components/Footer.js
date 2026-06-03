@@ -8,33 +8,27 @@ export default function Footer() {
         <div>
           <p className="text-xl font-bold text-white">PymeIQ</p>
           <p className="mt-2 text-sm text-slate-400">
-            Diagnóstico AI para PYMES en Latinoamérica.
+            AI diagnostic for SMBs in Latin America.
           </p>
           <p className="mt-6 text-xs text-slate-500">
-            © {year} Gilberto Cantú Armas — Proyecto AI-101 (Negocios Inteligentes).
+            © {year} Gilberto Cantú Armas — AI-101 course project.
           </p>
         </div>
 
         <nav
           className="flex flex-col md:items-end gap-2 text-sm"
-          aria-label="Enlaces del pie de página"
+          aria-label="Footer links"
         >
-          <Link href="/docs" className="hover:text-white">
-            Documentación
-          </Link>
+          <Link href="/core" className="hover:text-white">Core</Link>
+          <Link href="/dashboard" className="hover:text-white">Dashboard</Link>
+          <Link href="/docs" className="hover:text-white">Docs</Link>
           <a
-            href="https://github.com/"
+            href="https://github.com/Gilcantuu/pymeiq"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white"
           >
             GitHub ↗
-          </a>
-          <a
-            href="mailto:gilcantuarmas1@gmail.com"
-            className="hover:text-white"
-          >
-            Contacto
           </a>
         </nav>
       </div>

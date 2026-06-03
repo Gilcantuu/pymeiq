@@ -1,106 +1,97 @@
 # PymeIQ
 
-> Diagnóstico AI para PYMES en Latinoamérica.
-> Proyecto del curso **AI-101: Free-Stack Agentic Builder Studio** — Negocios Inteligentes.
-> Estudiante: Gilberto Cantú Armas · Profesora: MBA Patricia Navarro.
+> AI diagnostic for SMBs in Latin America.
+> Course project for **AI-101: Free-Stack Agentic Builder Studio** — Negocios Inteligentes.
+> Student: Gilberto Cantú Armas. Instructor: MBA Patricia Navarro.
 
-PymeIQ ayuda al dueño de una PYME a diagnosticar la salud de su negocio en 10 minutos respondiendo 12 preguntas, y devuelve un plan de acción priorizado, comparado con benchmarks de su industria.
+PymeIQ helps SMB owners diagnose their business in 10 minutes by answering 5 quick questions. It returns a structured SWOT analysis with 3 prioritized action recommendations.
 
-Este repo es el "Setup Sprint" (Week 0): infraestructura base lista para construir las siguientes 6 semanas.
-
----
-
-## 🧱 Stack
-
-| Capa            | Tecnología        |
-| --------------- | ----------------- |
-| Framework       | Next.js 14 (App Router) |
-| UI              | Tailwind CSS 3    |
-| Hosting         | Vercel (free tier) |
-| Repositorio     | GitHub            |
-| Base de datos   | Supabase (free tier, sin tablas en Week 0) |
-| Coding agent    | Claude Code       |
-| Lenguaje        | JavaScript (ES2022) |
+This repository contains the Week 1 deliverable: the Generative Core Agent at `/core`.
 
 ---
 
-## 🚀 Cómo correrlo en local
+## Stack
 
-### 1. Pre-requisitos
-- Node.js **20.x** o superior — verifica con `node -v`
-- npm 10+ (viene con Node) — verifica con `npm -v`
-- Cuenta de GitHub
-- Cuenta de Vercel (conectada a GitHub)
-- Cuenta de Supabase
+| Layer | Technology |
+| --- | --- |
+| Framework | Next.js 14 (App Router) |
+| UI | Tailwind CSS 3 |
+| Hosting | Vercel (free tier) |
+| Repository | GitHub |
+| Database | Supabase (free tier) |
+| AI generation | Simulated / mock generator in `lib/swotGenerator.js` (no real LLM call) |
+| Language | JavaScript (ES2022) |
 
-### 2. Clonar el repo
+The course is in English; all UI, code comments, and commit messages are in English.
+
+---
+
+## Local setup
+
+### 1. Prerequisites
+- Node.js 20.x or higher (`node -v`)
+- npm 10+ (`npm -v`)
+- GitHub account (linked to the repo)
+- Vercel account (linked to GitHub)
+- Supabase account (with project provisioned)
+
+### 2. Clone and install
 ```bash
-git clone https://github.com/<TU-USUARIO>/pymeiq.git
+git clone https://github.com/Gilcantuu/pymeiq.git
 cd pymeiq
-```
-
-### 3. Instalar dependencias
-```bash
 npm install
 ```
 
-### 4. Configurar variables de entorno
+### 3. Environment variables
 ```bash
 cp .env.example .env.local
 ```
-Edita `.env.local` y llena los valores (ver siguiente sección).
+Edit `.env.local` with values from Supabase → Settings → API:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-### 5. Correr el dev server
+### 4. Create the Supabase table
+In your Supabase project: **SQL Editor → New query**, paste the contents of `supabase/setup.sql` (or `04_SUPABASE_SETUP.sql` in the Week 1 packet), and click **Run**.
+
+### 5. Run dev server
 ```bash
 npm run dev
 ```
-Abre [http://localhost:3000](http://localhost:3000).
+Open http://localhost:3000.
 
 ---
 
-## 🔐 Variables de entorno
-
-Estas variables se cargan desde `.env.local` en desarrollo y desde Vercel → Settings → Environment Variables en producción.
-
-| Variable | Para qué sirve | Dónde obtenerla |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL del proyecto Supabase | Supabase → Settings → API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Llave pública anónima | Supabase → Settings → API |
-| `NEXT_PUBLIC_SITE_URL` | URL pública del sitio | `http://localhost:3000` en dev, tu `.vercel.app` en prod |
-
-⚠️ **Nunca** commitees `.env.local`. Ya está en `.gitignore`.
-
----
-
-## ☁️ Deploy a Vercel
-
-1. Haz push a `main` en GitHub.
-2. En vercel.com → "Add New Project" → importa tu repo.
-3. Framework preset: **Next.js** (autodetectado).
-4. En **Environment Variables**, agrega las 3 variables de arriba.
-5. Click "Deploy". En 1–2 min tendrás tu URL pública (`pymeiq.vercel.app` o similar).
-6. A partir de ahí, cada push a `main` se deploya automáticamente.
-
----
-
-## 🗂️ Estructura del proyecto
+## Project structure
 
 ```
 pymeiq/
 ├── app/
-│   ├── layout.js          # Layout raíz (Navbar + Footer)
-│   ├── page.js            # Homepage `/`
-│   ├── globals.css        # Tailwind base
+│   ├── layout.js                 # Root layout (Navbar + Footer)
+│   ├── page.js                   # Homepage /
+│   ├── globals.css               # Tailwind base
+│   ├── core/
+│   │   └── page.js               # /core — SWOT generator
+│   ├── dashboard/
+│   │   └── page.js               # /dashboard — last 5 saved diagnostics
 │   └── docs/
-│       └── page.js        # `/docs` placeholder
+│       └── page.js               # /docs — prompt library
 ├── components/
 │   ├── Navbar.js
 │   ├── Footer.js
 │   ├── Hero.js
 │   ├── HowItWorks.js
 │   ├── Roadmap.js
-│   └── TechStack.js
-├── public/                # Assets estáticos
+│   ├── TechStack.js
+│   ├── SwotForm.js               # NEW — controlled intake form
+│   └── SwotCard.js               # NEW — SWOT output renderer
+├── lib/
+│   ├── supabaseClient.js         # NEW — Supabase JS client singleton
+│   └── swotGenerator.js          # NEW — deterministic mock generator
+├── supabase/
+│   └── setup.sql                 # NEW — table + RLS + seed data
 ├── .env.example
 ├── .gitignore
 ├── next.config.js
@@ -112,30 +103,26 @@ pymeiq/
 
 ---
 
-## 🧪 Tests del Week 0
+## Important note on AI
 
-Los tres self-tests manuales obligatorios se documentan en `TEST_EVIDENCE.md`:
-1. Test de deploy (homepage carga, 200 OK, sin errores de consola).
-2. Test de navegación (`/docs` accesible desde el navbar).
-3. Test responsive (viewport 375px sin scroll horizontal).
+The Week 1 generator is a **deterministic mock function** (`lib/swotGenerator.js`). It does not call any external LLM. The SWOT output card prominently displays a badge that reads **"Simulated AI output (mock generator)"** to keep the educational nature of the demo transparent. Real LLM integration is deferred to a later week to keep this week's scope tight and cost at zero.
 
 ---
 
-## 🗺️ Roadmap del curso
+## Roadmap
 
-| Semana | Entregable |
-| ------ | ---------- |
-| Week 0 | Infraestructura (este repo) |
-| Week 1 | Generative Core Agent — motor diagnóstico AI |
-| Week 2 | Research + Benchmarking Dashboard |
-| Week 3 | Product Architecture + Pricing Simulator |
-| Week 4 | Marketing Engine + Landing Page upgrade |
-| Week 5 | Public Chatbot / Guided Assistant |
-| Week 6 | Integrated Agentic Venture (deliverable final) |
+| Week | Deliverable | Status |
+| --- | --- | --- |
+| Week 0 | Setup infrastructure | Completed |
+| Week 1 | Generative Core Agent (SWOT mock) | In progress |
+| Week 2 | Research + Benchmarking Dashboard | Upcoming |
+| Week 3 | Pricing simulator | Upcoming |
+| Week 4 | Marketing engine + landing upgrade | Upcoming |
+| Week 5 | Public chatbot / guided assistant | Upcoming |
+| Week 6 | Integrated agentic venture | Upcoming |
 
 ---
 
-## 📄 Licencia
+## License
 
-Proyecto académico — uso educativo.
-© 2026 Gilberto Cantú Armas.
+Educational project — © 2026 Gilberto Cantú Armas.
