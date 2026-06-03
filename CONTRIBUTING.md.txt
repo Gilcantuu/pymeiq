@@ -1,0 +1,19 @@
+@"
+# Contributing to PymeIQ
+
+Academic project for AI-101: Free-Stack Agentic Builder Studio.
+
+## Conventions
+- All UI, code, and commit messages in English.
+- Commit style: type(scope): summary.
+- Never commit .env.local.
+
+## Local workflow
+1. Clone the repo.
+2. Run npm install.
+3. Copy .env.example to .env.local and fill in Supabase values.
+4. Run npm run dev and open http://localhost:3000.
+
+## Deployment
+Every push to main triggers a Vercel auto-deploy.
+"@ | Set-Content -Path "CONTRIBUTING.md" -Encoding utf8
