@@ -1,43 +1,42 @@
--- ============================================================
--- PymeIQ — Week 2 Supabase migration
--- Adds the research_outputs table for the Research + Benchmarking
--- Dashboard at /research.
--- Run this in: Supabase project pymeiq-dev → SQL Editor → New query
--- ============================================================
+-- Week 3 — Supabase setup for PymeIQ pricing simulator.
+-- Run this in Supabase SQL Editor on the existing project.
+-- Same project as Weeks 1 and 2 (swot_outputs, research_outputs).
 
-create table if not exists public.research_outputs (
-  id              uuid primary key default gen_random_uuid(),
-  industry_focus  text not null,
-  geography       text not null,
-  hypothesis      text not null,
-  notes           text,
-  created_at      timestamptz not null default now()
+-- 1. Table
+create table if not exists public.pricing_scenarios (
+  id          bigserial primary key,
+  segment     text not null check (segment in ('Microempresa', 'PyME')),
+  tier        text not null check (tier in ('Free', 'Pro', 'Business')),
+  customers   integer not null check (customers >= 0 and customers <= 100000),
+  arpu        numeric(12, 2) not null check (arpu >= 0),
+  churn       numeric(5, 2) not null check (churn >= 0 and churn <= 50),
+  mrr         numeric(14, 2) not null,
+  arr         numeric(14, 2) not null,
+  created_at  timestamptz not null default now()
 );
 
-create index if not exists research_outputs_created_at_idx
-  on public.research_outputs (created_at desc);
+-- 2. Index for the "last 10 by segment" query.
+create index if not exists pricing_scenarios_segment_created_at_idx
+  on public.pricing_scenarios (segment, created_at desc);
 
-alter table public.research_outputs enable row level security;
+-- 3. RLS — same pattern as Weeks 1 and 2: public insert + public select.
+alter table public.pricing_scenarios enable row level security;
 
-drop policy if exists "anon_read_research_outputs" on public.research_outputs;
-create policy "anon_read_research_outputs"
-  on public.research_outputs for select using (true);
+drop policy if exists "pricing_scenarios_public_insert" on public.pricing_scenarios;
+create policy "pricing_scenarios_public_insert"
+  on public.pricing_scenarios
+  for insert
+  to anon
+  with check (true);
 
-drop policy if exists "anon_insert_research_outputs" on public.research_outputs;
-create policy "anon_insert_research_outputs"
-  on public.research_outputs for insert with check (true);
+drop policy if exists "pricing_scenarios_public_select" on public.pricing_scenarios;
+create policy "pricing_scenarios_public_select"
+  on public.pricing_scenarios
+  for select
+  to anon
+  using (true);
 
-insert into public.research_outputs
-  (industry_focus, geography, hypothesis, notes)
-values
-  ('Restaurants', 'Mexico',
-   'Mexican restaurant owners would pay MXN $300 per diagnostic if results are concrete and local.',
-   'Hypothesis to test in Week 4 marketing experiments.'),
-  ('Retail', 'Mexico',
-   'B2B2C channel via CANACO chambers is cheaper than direct SMB acquisition.',
-   'Surfaced by Week 2 human validation conversation.'),
-  ('Professional Services', 'LATAM',
-   'AI + expert-review tier converts older SMB owners better than AI-only.',
-   'Direct outcome of Week 2 risk-map insight on trust gap.');
-
-select count(*) as total_rows from public.research_outputs;
+-- 4. Seed (optional). Uncomment to populate two example rows for the demo.
+-- insert into public.pricing_scenarios (segment, tier, customers, arpu, churn, mrr, arr) values
+--   ('Microempresa', 'Pro',      800, 499,   5, 379240,   4550880),
+--   ('PyME',         'Business', 120, 2499,  3, 290884,   3490608);
