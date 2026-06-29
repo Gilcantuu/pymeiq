@@ -122,3 +122,12 @@ _Last update: June 2026 — Week 1 Generative Core Agent shipped._
 - Homepage upgraded to landing page with single CTA → `/core`
 - `/marketing` — brand system, persona, landing copy, 10 social posts (LinkedIn + Instagram), 3 video scripts, 14-day calendar, A/B headline test
 - New Supabase table: `marketing_assets` (saves A/B test results with impressions and chosen variant)
+
+## Week 5 — Public Chatbot / Guided Assistant
+
+- `/chat` — PymeIQ Advisor, rules-based bot (no LLM, labeled clearly)
+- Three intake questions: business name, industry, biggest pain
+- Recommendation card maps pain keywords to `/pricing`, `/research`, or `/core`
+- Guardrail response on out-of-scope keywords (legal, invest, medical, tax)
+- Human checkpoint button with mailto CTA to founder
+- Thumbs up/down rating; full transcript saved to Supabase `chat_sessions` as jsonb
