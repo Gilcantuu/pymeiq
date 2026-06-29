@@ -116,3 +116,9 @@ The Week 1 generator is a deterministic mock function (lib/swotGenerator.js). It
 Educational project — © 2026 Gilberto Cantú Armas.
 
 _Last update: June 2026 — Week 1 Generative Core Agent shipped._
+
+## Week 4 — Marketing Engine + Content System
+
+- Homepage upgraded to landing page with single CTA → `/core`
+- `/marketing` — brand system, persona, landing copy, 10 social posts (LinkedIn + Instagram), 3 video scripts, 14-day calendar, A/B headline test
+- New Supabase table: `marketing_assets` (saves A/B test results with impressions and chosen variant)
