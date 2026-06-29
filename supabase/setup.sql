@@ -1,24 +1,25 @@
--- Week 4 — Supabase setup for PymeIQ marketing engine.
--- Run this in Supabase SQL Editor on the existing pymeiq project.
+-- Week 5 — Supabase setup for PymeIQ Advisor (chat sessions).
 
-create table if not exists public.marketing_assets (
+create table if not exists public.chat_sessions (
   id              bigserial primary key,
-  variant         text not null check (variant in ('A', 'B')),
-  impressions_a   integer not null check (impressions_a >= 0),
-  impressions_b   integer not null check (impressions_b >= 0),
-  headline        text not null,
+  business_name   text,
+  industry        text,
+  pain            text,
+  recommendation  text,
+  rating          text check (rating in ('up', 'down')),
+  transcript      jsonb not null,
   saved_at        timestamptz not null default now()
 );
 
-create index if not exists marketing_assets_saved_at_idx
-  on public.marketing_assets (saved_at desc);
+create index if not exists chat_sessions_saved_at_idx
+  on public.chat_sessions (saved_at desc);
 
-alter table public.marketing_assets enable row level security;
+alter table public.chat_sessions enable row level security;
 
-drop policy if exists "marketing_assets_public_insert" on public.marketing_assets;
-create policy "marketing_assets_public_insert"
-  on public.marketing_assets for insert to anon with check (true);
+drop policy if exists "chat_sessions_public_insert" on public.chat_sessions;
+create policy "chat_sessions_public_insert"
+  on public.chat_sessions for insert to anon with check (true);
 
-drop policy if exists "marketing_assets_public_select" on public.marketing_assets;
-create policy "marketing_assets_public_select"
-  on public.marketing_assets for select to anon using (true);
+drop policy if exists "chat_sessions_public_select" on public.chat_sessions;
+create policy "chat_sessions_public_select"
+  on public.chat_sessions for select to anon using (true);
